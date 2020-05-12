@@ -8,7 +8,6 @@ public class ActionCharacter : MonoBehaviour
     public float speed;
     public Transform cameraTarget;
     public Transform mainCamera;
-    public Transform dummy;
 
     Vector3 playerMovement2;
 
@@ -153,6 +152,7 @@ public class ActionCharacter : MonoBehaviour
 
     void PlayerMovement4()
     {
+     
         // Input direction
         float hori = Input.GetAxis("Horizontal");
         float vert = Input.GetAxis("Vertical");
@@ -167,10 +167,10 @@ public class ActionCharacter : MonoBehaviour
         // Movement angle
         inputVector = inputVector.normalized;
         float angle = Mathf.Atan2(inputVector.x, inputVector.z) / Mathf.PI * 180.0f;
-        Matrix4x4 rotaiton = Matrix4x4.Rotate(Quaternion.Euler(0f, angle, 0f));
+        Matrix4x4 rotation = Matrix4x4.Rotate(Quaternion.Euler(0f, angle, 0f));
 
         // Camera offset by input
-        Vector3 movementDirection = rotaiton.MultiplyVector(cameraDirection.normalized);
+        Vector3 movementDirection = rotation.MultiplyVector(cameraDirection.normalized);
         Debug.DrawRay(transform.position, movementDirection.normalized * 2.0f, Color.blue);
 
         if (Mathf.Abs(hori) > 1e-5 || Mathf.Abs(vert) > 1e-5)
@@ -181,7 +181,7 @@ public class ActionCharacter : MonoBehaviour
 
 
             //Angle Camera
-            dummy.transform.Rotate(0, hori * 0.2f, 0);
+            cameraTarget.transform.Rotate(0, hori * 0.2f, 0);
 
         }
         else
