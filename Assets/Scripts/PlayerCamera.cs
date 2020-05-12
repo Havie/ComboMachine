@@ -43,14 +43,53 @@ public class PlayerCamera : MonoBehaviour
 
         CamControl();
     }
+    private float readInputX()
+    {
+        float x=0;
+        x = Input.GetAxis("Mouse X");
 
+        float a3=(Input.GetAxis("Axis 3"));
+        if (Mathf.Abs(a3) > 1e-2)
+            x += a3 *3;
+
+        return x;
+    }
+    private float readInputY()
+    {
+        float y = 0;
+        y = Input.GetAxis("Mouse Y");
+
+        float a6 = (Input.GetAxis("Axis 6"));
+        if (Mathf.Abs(a6) > 1e-2)
+            y += a6;
+
+        print(a6);
+
+        return y;
+    }
+    private bool readBlockDown()
+    {
+        if (Input.GetKeyDown(KeyCode.JoystickButton4) || (Input.GetKeyDown(KeyCode.LeftShift)))
+        {
+            return true;
+        }
+        return false;
+    }
+    private bool readBlockUp()
+    {
+        if (Input.GetKeyUp(KeyCode.JoystickButton4) || (Input.GetKeyUp(KeyCode.LeftShift)))
+        {
+            return true;
+        }
+        return false;
+    }
     void CamControl()
     {
         if (!blocking)
         {
             float hori = Input.GetAxis("Horizontal");
-            mouseX += Input.GetAxis("Mouse X") * rotationSpeed;
-            mouseY += Input.GetAxis("Mouse Y") * rotationSpeed;
+            mouseX += readInputX() * rotationSpeed;
+            mouseY += readInputY() * rotationSpeed;
             mouseY = Mathf.Clamp(mouseY, -15, 30);
 
             //allows camera to tilt and chase player like DW
@@ -58,7 +97,7 @@ public class PlayerCamera : MonoBehaviour
                 mouseX += hori;
 
             //BLOCK
-            if (Input.GetKeyDown(KeyCode.LeftShift))
+            if (readBlockDown())
             {
                 //push camera forward to create zoom in effect 
                 backfacing.position = backfacing.position + backfacing.forward *1.15f;
@@ -76,7 +115,7 @@ public class PlayerCamera : MonoBehaviour
 
             this.transform.LookAt(target);
         }
-        else if (Input.GetKeyUp(KeyCode.LeftShift))
+        else if (readBlockUp())
         {
             blocking = false;
             //Reset depth of camera to zoom out

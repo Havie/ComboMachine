@@ -161,7 +161,8 @@ public class ActionCharacter : MonoBehaviour
 
         // Camera direction
         Vector3 cameraDirection = cameraTarget.position - mainCamera.position;
-        cameraDirection.y = 0.0f;
+        cameraDirection.y = 0.0f; // we dont want up/down dir
+        //Vector3 option2= mainCamera.forward; //zero out 
         Debug.DrawRay(transform.position, cameraDirection.normalized * 2.0f, Color.green);
 
         // Movement angle
@@ -178,7 +179,6 @@ public class ActionCharacter : MonoBehaviour
             float facingAngle = Mathf.Atan2(movementDirection.x, movementDirection.z) / Mathf.PI * 180f;
             transform.eulerAngles = new Vector3(0.0f, facingAngle, 0.0f);
             _animator.SetBool("isMoving", true);
-
 
             //Angle Camera
             cameraTarget.transform.Rotate(0, hori * 0.2f, 0);
