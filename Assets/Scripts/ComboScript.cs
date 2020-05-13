@@ -7,20 +7,38 @@ public class ComboScript : StateMachineBehaviour
     public bool isIdleState;
     [SerializeField] private float _comboTime;
     [SerializeField] private float _comboTimeMax = 2;
+    [SerializeField] private float _comboTimeWindow = 2f;
+    [SerializeField] private float _comboTimeStartDelay = 0;
+    private bool inputRead;
 
+    public bool test;
 
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        _comboTime = Time.time;
-        _comboTimeMax = Time.time + _comboTimeMax;
-        
+        if (isIdleState)
+            animator.SetInteger("combo", 0);
+
+        float debugtime = _comboTimeMax;
+
+        _comboTime = Time.time + _comboTimeStartDelay;
+        _comboTimeMax = Time.time + _comboTimeWindow;
+        inputRead = false;
+
+        if (test)
+        {
+            Debug.Log("-----OnStateEnter------");
+            Debug.Log("ENTERED @" + _comboTime);
+            Debug.Log("MAX of " + _comboTime + "  +" + _comboTimeWindow + "  =" + _comboTimeMax);
+        }
+
     }
 
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        if(!isIdleState)
+
+        if (!isIdleState)
              _comboTime += Time.deltaTime;
 
         if (_comboTime < _comboTimeMax)
@@ -28,26 +46,40 @@ public class ComboScript : StateMachineBehaviour
             if (Input.GetMouseButtonDown(0))
             {
                 //move to next state;
-                animator.SetTrigger("Normal");
+                if (!inputRead)
+                {
+                    animator.SetInteger("combo", animator.GetInteger("combo") + 1);
+                    inputRead = true;
+                }
             }
             else if (Input.GetMouseButtonDown(1))
             {
                 //move to next state;
-                animator.SetTrigger("Strong");
+                if (!inputRead)
+                {
+
+                    animator.SetInteger("combo", animator.GetInteger("combo") + 10);
+                    inputRead = true;
+                }
             }
         }
-        else 
+        else if(!inputRead)
         {
+            if (test)
+            {
+                Debug.Log("reset combo" +Time.time);
+                test = false;
+            }
             //return to default state;
-            animator.SetTrigger("Return");
+            animator.SetInteger("combo", 0);
         }
     }
 
     // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
-    //override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
-    //{
-    //    
-    //}
+    override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+    {
+        
+    }
 
     // OnStateMove is called right after Animator.OnAnimatorMove()
     //override public void OnStateMove(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)

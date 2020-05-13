@@ -63,7 +63,6 @@ public class PlayerCamera : MonoBehaviour
         if (Mathf.Abs(a6) > 1e-2)
             y += a6;
 
-        print(a6);
 
         return y;
     }
