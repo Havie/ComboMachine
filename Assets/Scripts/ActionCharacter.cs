@@ -5,7 +5,7 @@ using UnityEngine;
 public class ActionCharacter : MonoBehaviour
 {
 
-    public float speed;
+
     public Transform cameraTarget;
     public Transform myCamera;
 
@@ -13,6 +13,7 @@ public class ActionCharacter : MonoBehaviour
     public BoxCollider _wpCollider2;
 
     private bool isAttacking;
+    private float speed;
 
     private Animator _animator;
     private PlayerCamera _pc;
@@ -37,7 +38,8 @@ public class ActionCharacter : MonoBehaviour
 
             PlayerMovement4();
     }
-
+    public void setSpeed(float amnt) => speed = amnt;
+    public float getSpeed() => speed;
     void PlayerMovement()
     {
         float hori = Input.GetAxis("Horizontal");
@@ -190,8 +192,6 @@ public class ActionCharacter : MonoBehaviour
                 float facingAngle = Mathf.Atan2(movementDirection.x, movementDirection.z) / Mathf.PI * 180f;
                 transform.eulerAngles = new Vector3(0.0f, facingAngle, 0.0f);
                 _animator.SetBool("isMoving", true);
-                if (_pc)
-                    _pc.setMoving(true);
 
                 //Angle Camera - unused? done in cam script i believe
                 cameraTarget.transform.Rotate(0, hori * 0.2f, 0);
@@ -237,13 +237,17 @@ public class ActionCharacter : MonoBehaviour
 
     public void lockMovement()
     {
-        isAttacking = true;
+        //isAttacking = true;
+        if (_pc)
+            _pc.setMoving(false);
         TellCanvas("Attacking");
     }
     public void unlockMovement()
     {
-        isAttacking = false;
+       // isAttacking = false;
         TellCanvas("Free");
+        if (_pc)
+            _pc.setMoving(true);
     }
 
 

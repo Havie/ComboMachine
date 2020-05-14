@@ -4,20 +4,28 @@ using UnityEngine;
 
 public class HitDetection : MonoBehaviour
 {
-    public ActionCharacter _parent;
+    public CharStats _parent;
 
     private void Start()
     {
+        //To do set up via code
         if (_parent == null)
-            Debug.Log("Parent is null for a collider");
+            Debug.Log("CharStats is null for a collider");
     }
 
     private void OnTriggerEnter(Collider other)
     {
         //Check type?
+        var damageable = other.GetComponent<Damageable>();
+        if(damageable)
+        {
+            //Not self
+            if(damageable.getGameObject() != _parent.gameObject)
+            {
+                damageable.damage(_parent.getAttack());
+               // Debug.Log("HIT: " + other.gameObject);
+            }
+        }
 
-        //Apply Damage from _parent?
-
-        Debug.Log("HIT: " +other.gameObject);
     }
 }

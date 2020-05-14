@@ -63,8 +63,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isIdleState: 0
+  attackAnim: 0
   _comboTime: 0
   _comboTimeMax: 2
+  _comboTimeWindow: 2
+  _comboTimeStartDelay: 0
+  test: 0
 --- !u!114 &-4152040156619514429
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -78,8 +82,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isIdleState: 0
+  attackAnim: 0
   _comboTime: 0
   _comboTimeMax: 2
+  _comboTimeWindow: 2
+  _comboTimeStartDelay: 0
+  test: 0
 --- !u!114 &-3469890296266121478
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -93,8 +101,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isIdleState: 1
+  attackAnim: 0
   _comboTime: 0
   _comboTimeMax: 2
+  _comboTimeWindow: 2
+  _comboTimeStartDelay: 0
+  test: 0
 --- !u!1102 &-1259001661760555921
 AnimatorState:
   serializedVersion: 5
@@ -167,31 +179,37 @@ AnimatorController:
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
+    m_Controller: {fileID: 0}
   - m_Name: Strong
     m_Type: 9
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
+    m_Controller: {fileID: 0}
   - m_Name: Return
     m_Type: 9
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
+    m_Controller: {fileID: 0}
   - m_Name: Atk
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
+    m_Controller: {fileID: 0}
   - m_Name: isMoving
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
+    m_Controller: {fileID: 0}
+  - m_Name: combo
+    m_Type: 3
+    m_DefaultFloat: 0
+    m_DefaultInt: 0
+    m_DefaultBool: 0
+    m_Controller: {fileID: 0}
   m_AnimatorLayers:
   - serializedVersion: 5
     m_Name: Base Layer
