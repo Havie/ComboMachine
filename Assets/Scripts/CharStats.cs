@@ -1,9 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class CharStats : MonoBehaviour
 {
+    public UIOnChar ui;
+    public Animator animator;
+
     [SerializeField] private float _hp;
     [SerializeField] private float _hpMax;
     [SerializeField] private float _attack;
@@ -14,12 +18,27 @@ public class CharStats : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        IniSpeed();
+        IniAnimator();
+        //To-Do: set UI if null
+
+
+    }
+    private void IniSpeed()
+    {
         //tell AC the speed
-        var ac  = this.GetComponent<ActionCharacter>();
+        var ac = this.GetComponent<ActionCharacter>();
         if (ac)
             ac.setSpeed(_speed);
         else
             Debug.LogWarning("Cant find Action Character on " + this.gameObject);
+    }
+    private void IniAnimator()
+    {
+        if (animator == null)
+            animator = this.GetComponent<Animator>();
+        if (animator == null)
+            Debug.LogWarning("Cant Find Animator for " +this.gameObject);
     }
 
     public float getHp() => _hp;
@@ -39,10 +58,23 @@ public class CharStats : MonoBehaviour
             _hp = _hpMax;
         else
             _hp -= amount;
-        
-        //Tell UI
 
+        if (amount > 0) // not being healed
+        {
+            //Tell UI
+            if (ui)
+                ui.PlayDamage(amount);
 
+            //tell the Animator;
+            AnimatorDamage();
+        }
+    }
+   private void AnimatorDamage()
+    {
+        System.Random rand = new System.Random();
+        int choice = rand.Next(1, 3);
+        if (animator)
+            animator.SetInteger("hit", choice);
     }
    private void Die()
     {

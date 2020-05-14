@@ -20,11 +20,9 @@ public class Damageable : MonoBehaviour
     }
     public void damage(float dmg)
     {
-        print(dmg + " Damage to : " + getGameObject());
-
+        //print(dmg + " Damage to : " + getGameObject());
         if (me)
-            me.damage(dmg);
-            
+            me.damage(dmg);    
     }
 
     
