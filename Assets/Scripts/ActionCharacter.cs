@@ -7,13 +7,19 @@ public class ActionCharacter : MonoBehaviour
 
     public float speed;
     public Transform cameraTarget;
-    public Transform mainCamera;
+    public Transform myCamera;
 
-    Vector3 playerMovement2;
+    public BoxCollider _wpCollider1;
+    public BoxCollider _wpCollider2;
 
-    private Vector2 savedDir;
+    private bool isAttacking;
 
     private Animator _animator;
+    private PlayerCamera _pc;
+
+    //OLD
+    private Vector2 savedDir;
+    Vector3 playerMovement2;
 
     // Start is called before the first frame update
     void Start()
@@ -21,12 +27,15 @@ public class ActionCharacter : MonoBehaviour
         _animator = this.GetComponent<Animator>();
         savedDir = Vector2.zero;
         playerMovement2 = Vector3.zero;
+        _pc = myCamera.GetComponent<PlayerCamera>();
+        ToggleColliders(false);
     }
 
     // Update is called once per frame
     void Update()
     {
-        PlayerMovement4();
+
+            PlayerMovement4();
     }
 
     void PlayerMovement()
@@ -109,7 +118,7 @@ public class ActionCharacter : MonoBehaviour
 
             savedDir = dir;
             //Left and Right and Inverted, and sometimes become same DIR?
-            Quaternion rotationRaw = Quaternion.FromToRotation(dir, mainCamera.transform.forward);
+            Quaternion rotationRaw = Quaternion.FromToRotation(dir, myCamera.transform.forward);
             Vector3 rotationVector = rotationRaw.eulerAngles;
             transform.rotation = Quaternion.Euler(0, rotationVector.y, 0);
 
@@ -152,44 +161,58 @@ public class ActionCharacter : MonoBehaviour
 
     void PlayerMovement4()
     {
-     
-        // Input direction
-        float hori = Input.GetAxis("Horizontal");
-        float vert = Input.GetAxis("Vertical");
-        Vector3 inputVector = new Vector3(hori, 0.0f, vert);
-        Debug.DrawRay(transform.position, inputVector * 2, Color.red);
 
-        // Camera direction
-        Vector3 cameraDirection = cameraTarget.position - mainCamera.position;
-        cameraDirection.y = 0.0f; // we dont want up/down dir
-        //Vector3 option2= mainCamera.forward; //zero out 
-        Debug.DrawRay(transform.position, cameraDirection.normalized * 2.0f, Color.green);
-
-        // Movement angle
-        inputVector = inputVector.normalized;
-        float angle = Mathf.Atan2(inputVector.x, inputVector.z) / Mathf.PI * 180.0f;
-        Matrix4x4 rotation = Matrix4x4.Rotate(Quaternion.Euler(0f, angle, 0f));
-
-        // Camera offset by input
-        Vector3 movementDirection = rotation.MultiplyVector(cameraDirection.normalized);
-        Debug.DrawRay(transform.position, movementDirection.normalized * 2.0f, Color.blue);
-
-        if (Mathf.Abs(hori) > 1e-5 || Mathf.Abs(vert) > 1e-5)
+        if (!isAttacking)
         {
-            float facingAngle = Mathf.Atan2(movementDirection.x, movementDirection.z) / Mathf.PI * 180f;
-            transform.eulerAngles = new Vector3(0.0f, facingAngle, 0.0f);
-            _animator.SetBool("isMoving", true);
+            // Input direction
+            float hori = Input.GetAxis("Horizontal");
+            float vert = Input.GetAxis("Vertical");
+            Vector3 inputVector = new Vector3(hori, 0.0f, vert);
+            Debug.DrawRay(transform.position, inputVector * 2, Color.red);
 
-            //Angle Camera - unused? done in cam script i believe
-            cameraTarget.transform.Rotate(0, hori * 0.2f, 0);
+            // Camera direction
+            Vector3 cameraDirection = cameraTarget.position - myCamera.position;
+            cameraDirection.y = 0.0f; // we dont want up/down dir
+                                      //Vector3 option2= mainCamera.forward; //zero out 
+            Debug.DrawRay(transform.position, cameraDirection.normalized * 2.0f, Color.green);
+
+            // Movement angle
+            inputVector = inputVector.normalized;
+            float angle = Mathf.Atan2(inputVector.x, inputVector.z) / Mathf.PI * 180.0f;
+            Matrix4x4 rotation = Matrix4x4.Rotate(Quaternion.Euler(0f, angle, 0f));
+
+            // Camera offset by input
+            Vector3 movementDirection = rotation.MultiplyVector(cameraDirection.normalized);
+            Debug.DrawRay(transform.position, movementDirection.normalized * 2.0f, Color.blue);
+
+            if ( (Mathf.Abs(hori) > 1e-5 || Mathf.Abs(vert) > 1e-5) && !isAttacking)
+            {
+                float facingAngle = Mathf.Atan2(movementDirection.x, movementDirection.z) / Mathf.PI * 180f;
+                transform.eulerAngles = new Vector3(0.0f, facingAngle, 0.0f);
+                _animator.SetBool("isMoving", true);
+                if (_pc)
+                    _pc.setMoving(true);
+
+                //Angle Camera - unused? done in cam script i believe
+                cameraTarget.transform.Rotate(0, hori * 0.2f, 0);
+
+                return;
+
+            }
 
         }
-        else
-        {
-            _animator.SetBool("isMoving", false);
-        }
+
+
+        _animator.SetBool("isMoving", false);
+        if (_pc)
+            _pc.setMoving(false);
+
     }
-
+    public void MoveForward()
+    {
+        //Move forward via code (no root motion)
+        transform.position += (transform.forward * speed * Time.deltaTime);
+    }
     private void TellCanvas(float h, float v)
     {
         string s = "";
@@ -207,4 +230,40 @@ public class ActionCharacter : MonoBehaviour
 
         UIDirectionPressed._instance.UpdateText(s);
     }
+    private void TellCanvas(string s)
+    {
+        UIDirectionPressed._instance.UpdateText(s);
+    }
+
+    public void lockMovement()
+    {
+        isAttacking = true;
+        TellCanvas("Attacking");
+    }
+    public void unlockMovement()
+    {
+        isAttacking = false;
+        TellCanvas("Free");
+    }
+
+
+    public void StartAttack()
+    {
+        //turn on colliders
+        ToggleColliders(true);
+    }
+    public void EndAttack()
+    {
+        //turn off coliders
+        ToggleColliders(false);
+    }
+
+    private void ToggleColliders(bool cond)
+    {
+        if (_wpCollider1)
+            _wpCollider1.enabled = cond;
+        if (_wpCollider2)
+            _wpCollider2.enabled = cond;
+    }
+
 }

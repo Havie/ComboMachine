@@ -5,11 +5,13 @@ using UnityEngine;
 public class ComboScript : StateMachineBehaviour
 {
     public bool isIdleState;
+    public bool attackAnim;
     [SerializeField] private float _comboTime;
     [SerializeField] private float _comboTimeMax = 2;
     [SerializeField] private float _comboTimeWindow = 2f;
     [SerializeField] private float _comboTimeStartDelay = 0;
     private bool inputRead;
+    private ActionCharacter ac;
 
     public bool test;
 
@@ -18,6 +20,12 @@ public class ComboScript : StateMachineBehaviour
     {
         if (isIdleState)
             animator.SetInteger("combo", 0);
+
+        ac = animator.GetComponent<ActionCharacter>();
+        if(ac && attackAnim)
+        {
+            ac.lockMovement();
+        }
 
         float debugtime = _comboTimeMax;
 
@@ -43,8 +51,8 @@ public class ComboScript : StateMachineBehaviour
 
         if (_comboTime < _comboTimeMax)
         {
-            if (Input.GetMouseButtonDown(0))
-            {
+            if (Input.GetMouseButtonDown(0) ||(Input.GetKeyUp(KeyCode.JoystickButton2)))
+                {
                 //move to next state;
                 if (!inputRead)
                 {
@@ -52,7 +60,7 @@ public class ComboScript : StateMachineBehaviour
                     inputRead = true;
                 }
             }
-            else if (Input.GetMouseButtonDown(1))
+            else if (Input.GetMouseButtonDown(1) || (Input.GetKeyUp(KeyCode.JoystickButton3)))
             {
                 //move to next state;
                 if (!inputRead)
@@ -78,7 +86,8 @@ public class ComboScript : StateMachineBehaviour
     // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        
+        if (ac && !isIdleState)
+            ac.unlockMovement();
     }
 
     // OnStateMove is called right after Animator.OnAnimatorMove()

@@ -18,6 +18,7 @@ public class PlayerCamera : MonoBehaviour
     private Vector3 backStartPos;
     private Vector3 _offset;
 
+    private bool moving;
 
     
     // Start is called before the first frame update
@@ -43,6 +44,8 @@ public class PlayerCamera : MonoBehaviour
 
         CamControl();
     }
+    public void setMoving(bool cond) => moving = cond;
+
     private float readInputX()
     {
         float x=0;
@@ -61,7 +64,7 @@ public class PlayerCamera : MonoBehaviour
 
         float a6 = (Input.GetAxis("Axis 6"));
         if (Mathf.Abs(a6) > 1e-2)
-            y += a6;
+           y += a6;
 
 
         return y;
@@ -92,8 +95,8 @@ public class PlayerCamera : MonoBehaviour
             mouseY = Mathf.Clamp(mouseY, -15, 30);
 
             //allows camera to tilt and chase player like DW
-            if (Mathf.Abs(hori) > 0.01f)
-                mouseX += hori;
+           if (Mathf.Abs(hori) > 0.01f && moving)
+              mouseX += hori;
 
             //BLOCK
             if (readBlockDown())
@@ -163,4 +166,5 @@ public class PlayerCamera : MonoBehaviour
         }
     }
 
+    
 }
