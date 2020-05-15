@@ -6,10 +6,9 @@ public class ComboScript : StateMachineBehaviour
 {
     public bool isIdleState;
     public bool attackAnim;
-    [SerializeField] private float _comboTime;
-    [SerializeField] private float _comboTimeMax = 2;
-    [SerializeField] private float _comboTimeWindow = 2f;
-    [SerializeField] private float _comboTimeStartDelay = 0;
+    private float _comboTimeStart;
+    private float _comboTimeMax;
+    private float _comboTimeWindow;
     private bool inputRead;
     private ActionCharacter ac;
 
@@ -28,16 +27,19 @@ public class ComboScript : StateMachineBehaviour
         }
 
         float debugtime = _comboTimeMax;
+        _comboTimeWindow = stateInfo.length - (stateInfo.length/4);
 
-        _comboTime = Time.time + _comboTimeStartDelay;
+        _comboTimeStart = Time.time ;
         _comboTimeMax = Time.time + _comboTimeWindow;
         inputRead = false;
 
         if (test)
         {
             Debug.Log("-----OnStateEnter------");
-            Debug.Log("ENTERED @" + _comboTime);
-            Debug.Log("MAX of " + _comboTime + "  +" + _comboTimeWindow + "  =" + _comboTimeMax);
+            Debug.Log("ENTERED @" + _comboTimeStart);
+            Debug.Log("MAX of " + _comboTimeStart + "  +" + _comboTimeWindow + "  =" + _comboTimeMax);
+            Debug.Log("Window = " + _comboTimeWindow);
+            Debug.Log("StaryDelay = " + (_comboTimeStart + _comboTimeWindow /3));
         }
 
     }
@@ -46,40 +48,21 @@ public class ComboScript : StateMachineBehaviour
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
 
-        if (!isIdleState)
-             _comboTime += Time.deltaTime;
 
-        if (_comboTime < _comboTimeMax)
+        //Seems to create a nice window, you have 3/8ths to 3/4th of the anim time to read input
+        if ((isIdleState) || (Time.time < _comboTimeMax && Time.time >= (_comboTimeStart + _comboTimeWindow/2 )))
         {
-            if (Input.GetMouseButtonDown(0) ||(Input.GetKeyUp(KeyCode.JoystickButton2)))
-                {
-                //move to next state;
-                if (!inputRead)
-                {
-                    animator.SetInteger("combo", animator.GetInteger("combo") + 1);
-                    inputRead = true;
-                }
-            }
-            else if (Input.GetMouseButtonDown(1) || (Input.GetKeyUp(KeyCode.JoystickButton3)))
-            {
-                //move to next state;
-                if (!inputRead)
-                {
-
-                    animator.SetInteger("combo", animator.GetInteger("combo") + 10);
-                    inputRead = true;
-                }
-            }
+            CheckAttack(animator);
         }
-        else if(!inputRead)
+        else if(Time.time >= _comboTimeMax &&  !inputRead)
         {
             if (test)
             {
-                Debug.Log("reset combo" +Time.time);
-                test = false;
+               Debug.Log("reset combo" +Time.time);
+               test = false;
             }
             //return to default state;
-            animator.SetInteger("combo", 0);
+          animator.SetInteger("combo", 0);
         }
     }
 
@@ -87,7 +70,38 @@ public class ComboScript : StateMachineBehaviour
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         if (ac && !isIdleState)
+        {
             ac.unlockMovement();
+            ac.UnCommitToAttack();
+            if (test)
+                Debug.Log("Final Exit @ " + Time.time);
+        }
+    }
+
+    private void CheckAttack(Animator animator)
+    {
+        if (Input.GetMouseButtonDown(0) || (Input.GetKeyUp(KeyCode.JoystickButton2)))
+        {
+            CommitedAttack(animator, 1);
+        }
+        else if (Input.GetMouseButtonDown(1) || (Input.GetKeyUp(KeyCode.JoystickButton3)))
+        {
+            CommitedAttack(animator, 10);
+        }
+    }
+    private void CommitedAttack(Animator animator, int combo)
+    {
+        //move to next state;
+        if (!inputRead)
+        {
+            animator.SetInteger("combo", animator.GetInteger("combo") + combo);
+            UIDirectionPressed._instance.UpdateText((animator.GetInteger("combo").ToString()));
+            inputRead = true;
+            //Tell the movement read we've commited to an attack and not to change direction
+            if (ac)
+                ac.CommitToAttack();
+        }
+
     }
 
     // OnStateMove is called right after Animator.OnAnimatorMove()

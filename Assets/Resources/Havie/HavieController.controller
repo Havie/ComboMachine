@@ -188,10 +188,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isIdleState: 0
   attackAnim: 1
-  _comboTime: 0
-  _comboTimeMax: 2
-  _comboTimeWindow: 2
-  _comboTimeStartDelay: 0
   test: 0
 --- !u!1109 &-7523682048345638889
 AnimatorTransition:
@@ -221,10 +217,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isIdleState: 1
   attackAnim: 0
-  _comboTime: 0
-  _comboTimeMax: 2
-  _comboTimeWindow: 2
-  _comboTimeStartDelay: 0
   test: 0
 --- !u!114 &-4714117075854930003
 MonoBehaviour:
@@ -240,10 +232,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isIdleState: 0
   attackAnim: 1
-  _comboTime: 0
-  _comboTimeMax: 2
-  _comboTimeWindow: 1.5
-  _comboTimeStartDelay: 0.3
   test: 0
 --- !u!1101 &-4540941742590250280
 AnimatorStateTransition:
@@ -306,10 +294,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isIdleState: 0
   attackAnim: 1
-  _comboTime: 0
-  _comboTimeMax: 2
-  _comboTimeWindow: 2
-  _comboTimeStartDelay: 0
   test: 0
 --- !u!114 &-4152040156619514429
 MonoBehaviour:
@@ -325,10 +309,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isIdleState: 0
   attackAnim: 1
-  _comboTime: 0
-  _comboTimeMax: 2
-  _comboTimeWindow: 1.3
-  _comboTimeStartDelay: 0.1
   test: 0
 --- !u!1101 &-4151223024850441222
 AnimatorStateTransition:
@@ -397,10 +377,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isIdleState: 1
   attackAnim: 0
-  _comboTime: 0
-  _comboTimeMax: 2
-  _comboTimeWindow: 2
-  _comboTimeStartDelay: 0
   test: 0
 --- !u!1102 &-2818050798873833312
 AnimatorState:
@@ -555,10 +531,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isIdleState: 0
   attackAnim: 1
-  _comboTime: 0
-  _comboTimeMax: 2
-  _comboTimeWindow: 2
-  _comboTimeStartDelay: 0
   test: 0
 --- !u!1102 &-1259001661760555921
 AnimatorState:
@@ -830,10 +802,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isIdleState: 0
   attackAnim: 1
-  _comboTime: 0
-  _comboTimeMax: 2
-  _comboTimeWindow: 2
-  _comboTimeStartDelay: 0
   test: 0
 --- !u!114 &575842030508385248
 MonoBehaviour:
@@ -849,10 +817,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isIdleState: 0
   attackAnim: 1
-  _comboTime: 0
-  _comboTimeMax: 2
-  _comboTimeWindow: 2
-  _comboTimeStartDelay: 0
   test: 0
 --- !u!1101 &1019496235878233150
 AnimatorStateTransition:
@@ -893,6 +857,9 @@ AnimatorStateTransition:
   - m_ConditionMode: 2
     m_ConditionEvent: isMoving
     m_EventTreshold: 0
+  - m_ConditionMode: 6
+    m_ConditionEvent: combo
+    m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -1259001661760555921}
   m_Solo: 0
@@ -915,7 +882,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: S
-  m_Speed: 0.84
+  m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: 4034745329413831002}
@@ -979,10 +946,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isIdleState: 0
   attackAnim: 1
-  _comboTime: 0
-  _comboTimeMax: 2
-  _comboTimeWindow: 2
-  _comboTimeStartDelay: 0
   test: 0
 --- !u!1102 &3160919416058367592
 AnimatorState:
@@ -1328,10 +1291,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isIdleState: 0
   attackAnim: 1
-  _comboTime: 0
-  _comboTimeMax: 2
-  _comboTimeWindow: 0.5
-  _comboTimeStartDelay: 0.1
   test: 0
 --- !u!1101 &8352138753146504511
 AnimatorStateTransition:

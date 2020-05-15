@@ -29,8 +29,11 @@ public class UIDirectionPressed : MonoBehaviour
 
     public void UpdateText(string s)
     {
-        _text.text = s;
-        StartCoroutine(ShowTextDelay());
+        if (_text)
+        {
+            _text.text = s;
+            StartCoroutine(ShowTextDelay());
+        }
     }
     IEnumerator ShowTextDelay()
     {
