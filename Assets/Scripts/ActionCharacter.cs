@@ -38,7 +38,7 @@ public class ActionCharacter : MonoBehaviour
     void Update()
     {
 
-            PlayerMovement4();
+           // PlayerMovement4();
     }
     public void  setSpeed(float amnt) => speed = amnt;
     public float getSpeed() => speed;
@@ -84,6 +84,39 @@ public class ActionCharacter : MonoBehaviour
 
         }
         _animator.SetBool("isMoving", false);
+
+    }
+    public void PlayerMovement4(float hori, float vert) //Seth Berrier override
+    {
+
+        if (!isAttacking)
+        {
+            // Input direction
+            Vector3 inputVector = new Vector3(hori, 0.0f, vert);
+            Debug.DrawRay(transform.position, inputVector * 2, Color.red);
+
+            // Camera direction
+            Vector3 cameraDirection = cameraTarget.position - myCamera.position;
+            cameraDirection.y = 0.0f; // we dont want up/down dir
+                                      //Vector3 option2= mainCamera.forward; //zero out 
+            Debug.DrawRay(transform.position, cameraDirection.normalized * 2.0f, Color.green);
+
+            // Movement angle
+            inputVector = inputVector.normalized;
+            float angle = Mathf.Atan2(inputVector.x, inputVector.z) / Mathf.PI * 180.0f;
+            Matrix4x4 rotation = Matrix4x4.Rotate(Quaternion.Euler(0f, angle, 0f));
+
+            // Camera offset by input
+            Vector3 movementDirection = rotation.MultiplyVector(cameraDirection.normalized);
+            Debug.DrawRay(transform.position, movementDirection.normalized * 2.0f, Color.blue);
+
+            if ((Mathf.Abs(hori) > 1e-5 || Mathf.Abs(vert) > 1e-5) && !isAttacking)
+            {
+                float facingAngle = Mathf.Atan2(movementDirection.x, movementDirection.z) / Mathf.PI * 180f;
+                transform.eulerAngles = new Vector3(0.0f, facingAngle, 0.0f);
+            }
+
+        }
 
     }
     void PlayerMovement5() // my adaptation but broken? need to ask in person
