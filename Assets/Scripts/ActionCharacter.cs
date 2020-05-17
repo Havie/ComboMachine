@@ -75,7 +75,7 @@ public class ActionCharacter : MonoBehaviour
                 transform.eulerAngles = new Vector3(0.0f, facingAngle, 0.0f);
                 _animator.SetBool("isMoving", true);
 
-                //Angle Camera - unused? done in cam script i believe
+                //Angle Camera - unused , now handled in cam script
                 // cameraTarget.transform.Rotate(0, hori * 0.2f, 0);
 
                 return;

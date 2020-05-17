@@ -10,6 +10,9 @@ public class UIOnChar : MonoBehaviour
 {
     public GameObject damagePrefab;
 
+    //How to do this w 2p?
+    private Camera _mainCam;
+
     //List<GameObject> popups;
 
 
@@ -20,7 +23,14 @@ public class UIOnChar : MonoBehaviour
         if (damagePrefab == null)
             Debug.LogWarning("Cant find Damage prefab");
 
+        _mainCam = Camera.main;
        // popups = new List<GameObject>();
+    }
+    private void LateUpdate()
+    {
+        if(_mainCam)
+            this.transform.LookAt(_mainCam.transform);
+ 
     }
 
     public void PlayDamage(float amount)

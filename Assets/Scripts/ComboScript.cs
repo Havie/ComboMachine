@@ -13,6 +13,7 @@ public class ComboScript : StateMachineBehaviour
     private ActionCharacter ac;
 
     public bool test;
+    public bool test2;
 
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
@@ -56,7 +57,7 @@ public class ComboScript : StateMachineBehaviour
         }
         else if(Time.time >= _comboTimeMax &&  !inputRead)
         {
-            if (test)
+            if (test2)
             {
                Debug.Log("reset combo" +Time.time);
                test = false;

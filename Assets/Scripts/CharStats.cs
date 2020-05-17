@@ -47,7 +47,7 @@ public class CharStats : MonoBehaviour
     public float getDefense() => _defense;
     public float getSpeed() => _speed;
 
-    public void damage(float amount)
+    public void damage(float amount, Damageable.HitDirection dir)
     {
         if (_hp - amount <= 0)
         {
@@ -59,24 +59,25 @@ public class CharStats : MonoBehaviour
         else
             _hp -= amount;
 
-        if (amount > 0) // not being healed
+        if (amount > 0) // not being healed To=Do: some other threshold
         {
             //Tell UI
             if (ui)
                 ui.PlayDamage(amount);
 
             //tell the Animator;
-            AnimatorDamage();
+            AnimatorDamage(dir);
         }
     }
-   private void AnimatorDamage()
+   private void AnimatorDamage(Damageable.HitDirection dir)
     {
-        System.Random rand = new System.Random();
-        int choice = rand.Next(1, 3);
+        //System.Random rand = new System.Random();
+       // int choice = rand.Next(1, 3);
         if (animator)
-            animator.SetInteger("hit", choice);
+            animator.SetInteger("hit", (int)dir);
     }
-   private void Die()
+
+    private void Die()
     {
         
     }

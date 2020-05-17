@@ -189,6 +189,7 @@ MonoBehaviour:
   isIdleState: 0
   attackAnim: 1
   test: 0
+  test2: 0
 --- !u!1109 &-7523682048345638889
 AnimatorTransition:
   m_ObjectHideFlags: 1
@@ -218,6 +219,7 @@ MonoBehaviour:
   isIdleState: 1
   attackAnim: 0
   test: 0
+  test2: 0
 --- !u!114 &-4714117075854930003
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -233,6 +235,7 @@ MonoBehaviour:
   isIdleState: 0
   attackAnim: 1
   test: 0
+  test2: 0
 --- !u!1101 &-4540941742590250280
 AnimatorStateTransition:
   m_ObjectHideFlags: 1
@@ -295,6 +298,7 @@ MonoBehaviour:
   isIdleState: 0
   attackAnim: 1
   test: 0
+  test2: 0
 --- !u!114 &-4152040156619514429
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -310,6 +314,7 @@ MonoBehaviour:
   isIdleState: 0
   attackAnim: 1
   test: 0
+  test2: 0
 --- !u!1101 &-4151223024850441222
 AnimatorStateTransition:
   m_ObjectHideFlags: 1
@@ -378,6 +383,7 @@ MonoBehaviour:
   isIdleState: 1
   attackAnim: 0
   test: 0
+  test2: 0
 --- !u!1102 &-2818050798873833312
 AnimatorState:
   serializedVersion: 5
@@ -532,6 +538,7 @@ MonoBehaviour:
   isIdleState: 0
   attackAnim: 1
   test: 0
+  test2: 1
 --- !u!1102 &-1259001661760555921
 AnimatorState:
   serializedVersion: 5
@@ -803,6 +810,7 @@ MonoBehaviour:
   isIdleState: 0
   attackAnim: 1
   test: 0
+  test2: 0
 --- !u!114 &575842030508385248
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -818,6 +826,7 @@ MonoBehaviour:
   isIdleState: 0
   attackAnim: 1
   test: 0
+  test2: 1
 --- !u!1101 &1019496235878233150
 AnimatorStateTransition:
   m_ObjectHideFlags: 1
@@ -947,6 +956,7 @@ MonoBehaviour:
   isIdleState: 0
   attackAnim: 1
   test: 0
+  test2: 0
 --- !u!1102 &3160919416058367592
 AnimatorState:
   serializedVersion: 5
@@ -1292,6 +1302,7 @@ MonoBehaviour:
   isIdleState: 0
   attackAnim: 1
   test: 0
+  test2: 0
 --- !u!1101 &8352138753146504511
 AnimatorStateTransition:
   m_ObjectHideFlags: 1
