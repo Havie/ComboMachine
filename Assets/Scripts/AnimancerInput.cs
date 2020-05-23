@@ -58,7 +58,7 @@ namespace Animancer.Examples.Events
 
 
 
-        [SerializeField] private AnimancerState lastKnown;
+        [SerializeField] private ClipState.Transition lastKnown;
 
 
         [SerializeField] private SimpleEventReceiver _EventReceiver;
@@ -97,23 +97,47 @@ namespace Animancer.Examples.Events
             } 
             */
         }
+        public void ReturnToIdle()
+        {
+            PlayAnim(-1);
+        }
 
         public void PlayAnim(int id)
         {
-           // print("heard " + id);
+            if(id!=-1 && id !=0)
+                print("heard " + id);
 
             switch(id)
             {
                 case -1:
-                     _Animancer.Play(_Idle, 0.25f).Speed = 0.15f;
+                     _Animancer.Play(_Idle, 0.3f).Speed = 0.15f;
+                    lastKnown.Clip = _Idle.Clip;
                      break;
                 case 0:
-                    _Animancer.Play(_Walk, 0.5f).Speed = 0.75f;
+                    _Animancer.Play(_Walk, 0.3f).Speed = 0.75f;
+                    lastKnown.Clip = _Walk.Clip;
                     break;
                 case 1:
-                    _Animancer.Play(_S, 0.5f).Speed = 0.75f;
+                    _Animancer.Play(_S, 0.5f).Speed = 0.55f;
+                    lastKnown.Clip = _S.Clip;
+                    Time.timeScale = 0.5f;
                     break;
-
+                case 2:
+                    _Animancer.Play(_SS, 0.5f).Speed = 0.55f;
+                    lastKnown.Clip = _SS.Clip;
+                    break;
+                case 3:
+                    _Animancer.Play(_SSS, 0.5f).Speed = 0.55f;
+                    lastKnown.Clip = _SSS.Clip;
+                    break;
+                case 4:
+                    _Animancer.Play(_SSSS, 0.5f).Speed = 0.55f;
+                    lastKnown.Clip = _SSSS.Clip;
+                    break;
+                case 5:
+                    _Animancer.Play(_SSSSS, 0.5f).Speed = 0.55f;
+                    lastKnown.Clip = _SSSSS.Clip;
+                    break;
             }
         }
 

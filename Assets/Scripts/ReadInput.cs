@@ -51,21 +51,22 @@ public class ReadInput : MonoBehaviour
         else if (ReadStrong())
             HandleStrong();
     }
+    public void ClearCombo() { _combo = 0; }
     private void ReadMovement()
     {
         float hori = Input.GetAxis("Horizontal");
         float vert = Input.GetAxis("Vertical");
         if (_ac)
-            _ac.PlayerMovement4(hori, vert);
+            _ac.PlayerMovement4(hori, vert, _state.CheckCommittment());
         if ((Mathf.Abs(hori) > 1e-5 || Mathf.Abs(vert) > 1e-5))
         {
            if(_state.CanMove())
-                UpdateAnimancer(0);
+                UpdateAnimancer(0); // move
         }
         else
         {
             if(_state.CanMove())
-                UpdateAnimancer(-1);
+                UpdateAnimancer(-1); // idle
         }
     }
     private bool ReadNormal()
@@ -85,7 +86,8 @@ public class ReadInput : MonoBehaviour
             if (_combo < _COMBOMAX_N)
             {
                UpdateAnimancer(++_combo);
-                _state.setState(CharacterState.eSTATE.ATTACKING);
+               _state.setState(CharacterState.eSTATE.ATTACKING);
+               _state.CloseWindow();
             }
         }
     }
@@ -97,6 +99,8 @@ public class ReadInput : MonoBehaviour
             if (_combo < _COMBOMAX_N+10) // meh?
             {
                 UpdateAnimancer(_combo += 10);
+                _state.setState(CharacterState.eSTATE.ATTACKING);
+                _state.CloseWindow();
             }
         }
     }

@@ -14,7 +14,7 @@ public class ActionCharacter : MonoBehaviour
 
     private bool isAttacking;
     private float speed;
-    private bool comboState=true;
+    private bool comboState = true;
 
     private Animator _animator;
     private PlayerCamera _pc;
@@ -38,9 +38,9 @@ public class ActionCharacter : MonoBehaviour
     void Update()
     {
 
-           // PlayerMovement4();
+        // PlayerMovement4();
     }
-    public void  setSpeed(float amnt) => speed = amnt;
+    public void setSpeed(float amnt) => speed = amnt;
     public float getSpeed() => speed;
 
     void PlayerMovement4() //Seth Berrier
@@ -69,7 +69,7 @@ public class ActionCharacter : MonoBehaviour
             Vector3 movementDirection = rotation.MultiplyVector(cameraDirection.normalized);
             Debug.DrawRay(transform.position, movementDirection.normalized * 2.0f, Color.blue);
 
-            if ( (Mathf.Abs(hori) > 1e-5 || Mathf.Abs(vert) > 1e-5) && !isAttacking)
+            if ((Mathf.Abs(hori) > 1e-5 || Mathf.Abs(vert) > 1e-5) && !isAttacking)
             {
                 float facingAngle = Mathf.Atan2(movementDirection.x, movementDirection.z) / Mathf.PI * 180f;
                 transform.eulerAngles = new Vector3(0.0f, facingAngle, 0.0f);
@@ -86,38 +86,51 @@ public class ActionCharacter : MonoBehaviour
         _animator.SetBool("isMoving", false);
 
     }
-    public void PlayerMovement4(float hori, float vert) //Seth Berrier override
+    public void PlayerMovement4(float hori, float vert, bool restricted) //Seth Berrier override
     {
+        // Input direction
+        Vector3 inputVector = new Vector3(hori, 0.0f, vert);
+        Debug.DrawRay(transform.position, inputVector * 2, Color.red);
 
-        if (!isAttacking)
+        // Camera direction
+        Vector3 cameraDirection = cameraTarget.position - myCamera.position;
+        cameraDirection.y = 0.0f; // we dont want up/down dir
+                                  //Vector3 option2= mainCamera.forward; //zero out 
+        Debug.DrawRay(transform.position, cameraDirection.normalized * 2.0f, Color.green);
+
+        // Movement angle
+        inputVector = inputVector.normalized;
+        float angle = Mathf.Atan2(inputVector.x, inputVector.z) / Mathf.PI * 180.0f;
+        if (restricted)
         {
-            // Input direction
-            Vector3 inputVector = new Vector3(hori, 0.0f, vert);
-            Debug.DrawRay(transform.position, inputVector * 2, Color.red);
+            print("restricted : " + angle + " to :" + ContainAngle(angle) + "  From input: (" + hori + " , " + vert + " )" );
+            angle = ContainAngle(angle);
+            
+        }
+        Matrix4x4 rotation = Matrix4x4.Rotate(Quaternion.Euler(0f, angle, 0f));
 
-            // Camera direction
-            Vector3 cameraDirection = cameraTarget.position - myCamera.position;
-            cameraDirection.y = 0.0f; // we dont want up/down dir
-                                      //Vector3 option2= mainCamera.forward; //zero out 
-            Debug.DrawRay(transform.position, cameraDirection.normalized * 2.0f, Color.green);
+        // Camera offset by input
+        Vector3 movementDirection = rotation.MultiplyVector(cameraDirection.normalized);
+        Debug.DrawRay(transform.position, movementDirection.normalized * 2.0f, Color.blue);
 
-            // Movement angle
-            inputVector = inputVector.normalized;
-            float angle = Mathf.Atan2(inputVector.x, inputVector.z) / Mathf.PI * 180.0f;
-            Matrix4x4 rotation = Matrix4x4.Rotate(Quaternion.Euler(0f, angle, 0f));
-
-            // Camera offset by input
-            Vector3 movementDirection = rotation.MultiplyVector(cameraDirection.normalized);
-            Debug.DrawRay(transform.position, movementDirection.normalized * 2.0f, Color.blue);
-
-            if ((Mathf.Abs(hori) > 1e-5 || Mathf.Abs(vert) > 1e-5) && !isAttacking)
-            {
-                float facingAngle = Mathf.Atan2(movementDirection.x, movementDirection.z) / Mathf.PI * 180f;
-                transform.eulerAngles = new Vector3(0.0f, facingAngle, 0.0f);
-            }
-
+        if ((Mathf.Abs(hori) > 1e-5 || Mathf.Abs(vert) > 1e-5) && !isAttacking)
+        {
+            float facingAngle = Mathf.Atan2(movementDirection.x, movementDirection.z) / Mathf.PI * 180f;
+            transform.eulerAngles = new Vector3(0.0f, facingAngle, 0.0f);
         }
 
+    }
+    private float ContainAngle(float angle)
+    {
+        if (Mathf.Abs(angle) > 30)
+        {
+            if (angle > 0)
+                return 30;
+            else if (angle < 0)
+                return -30;
+        }
+
+        return angle;
     }
     void PlayerMovement5() // my adaptation but broken? need to ask in person
     {
@@ -142,7 +155,7 @@ public class ActionCharacter : MonoBehaviour
             //Matrix4x4 rotation = Matrix4x4.Rotate(Quaternion.Euler(0f, angle, 0f));
 
             //angle of movement
-            float angle2 =Mathf.Acos(Vector3.Dot(inputVector.normalized, cameraDirection.normalized));
+            float angle2 = Mathf.Acos(Vector3.Dot(inputVector.normalized, cameraDirection.normalized));
 
             //since we want a unit vector for H assume lenth =1
             float lengthofX = 1 * Mathf.Cos(angle2);
@@ -151,7 +164,7 @@ public class ActionCharacter : MonoBehaviour
 
 
             // Camera offset by input
-           // Vector3 movementDirection = rotation.MultiplyVector(cameraDirection.normalized);
+            // Vector3 movementDirection = rotation.MultiplyVector(cameraDirection.normalized);
             Debug.DrawRay(transform.position, movementDirection.normalized * 2.0f, Color.blue);
 
             if ((Mathf.Abs(hori) > 1e-5 || Mathf.Abs(vert) > 1e-5))
@@ -191,18 +204,18 @@ public class ActionCharacter : MonoBehaviour
             s = "Forward";
         else if (h == 0 && v < 0)
             s = "Backward";
-        else if (h >0 && v == 0)
+        else if (h > 0 && v == 0)
             s = "Right";
         else if (h < 0 && v == 0)
             s = "Left";
         else
             s = "Unknown";
 
-       // UIDirectionPressed._instance.UpdateText(s);
+        // UIDirectionPressed._instance.UpdateText(s);
     }
     private void TellCanvas(string s)
     {
-       // UIDirectionPressed._instance.UpdateText(s);
+        // UIDirectionPressed._instance.UpdateText(s);
     }
 
     public void lockMovement()
