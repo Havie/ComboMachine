@@ -95,8 +95,8 @@ public class PlayerCamera : MonoBehaviour
             mouseY = Mathf.Clamp(mouseY, -15, 30);
 
             //allows camera to tilt and chase player like DW
-            if (Mathf.Abs(hori) > 0.01f && mobile)
-                mouseX += hori;
+           // if (Mathf.Abs(hori) > 0.01f && mobile)
+              //  mouseX += hori;
 
 
             //BLOCK

@@ -57,7 +57,9 @@ public class ReadInput : MonoBehaviour
         float hori = Input.GetAxis("Horizontal");
         float vert = Input.GetAxis("Vertical");
         if (_ac)
-            _ac.PlayerMovement4(hori, vert, _state.CheckCommittment());
+         _ac.PlayerMovement4(hori, vert, _state.CheckCommittment());
+
+
         if ((Mathf.Abs(hori) > 1e-5 || Mathf.Abs(vert) > 1e-5))
         {
            if(_state.CanMove())

@@ -22,6 +22,7 @@ public class ActionCharacter : MonoBehaviour
     //OLD
     private Vector2 savedDir;
     Vector3 playerMovement2;
+    private bool test = false;
 
     // Start is called before the first frame update
     void Start()
@@ -92,21 +93,14 @@ public class ActionCharacter : MonoBehaviour
         Vector3 inputVector = new Vector3(hori, 0.0f, vert);
         Debug.DrawRay(transform.position, inputVector * 2, Color.red);
 
-        // Camera direction
+        // Camera direction       //Vector3 option2= mainCamera.forward;   
         Vector3 cameraDirection = cameraTarget.position - myCamera.position;
-        cameraDirection.y = 0.0f; // we dont want up/down dir
-                                  //Vector3 option2= mainCamera.forward; //zero out 
+        cameraDirection.y = 0.0f; // we dont want up/down dir  zero out y     
         Debug.DrawRay(transform.position, cameraDirection.normalized * 2.0f, Color.green);
 
         // Movement angle
         inputVector = inputVector.normalized;
         float angle = Mathf.Atan2(inputVector.x, inputVector.z) / Mathf.PI * 180.0f;
-        if (restricted)
-        {
-            print("restricted : " + angle + " to :" + ContainAngle(angle) + "  From input: (" + hori + " , " + vert + " )" );
-            angle = ContainAngle(angle);
-            
-        }
         Matrix4x4 rotation = Matrix4x4.Rotate(Quaternion.Euler(0f, angle, 0f));
 
         // Camera offset by input
@@ -116,22 +110,72 @@ public class ActionCharacter : MonoBehaviour
         if ((Mathf.Abs(hori) > 1e-5 || Mathf.Abs(vert) > 1e-5) && !isAttacking)
         {
             float facingAngle = Mathf.Atan2(movementDirection.x, movementDirection.z) / Mathf.PI * 180f;
+            float currentAngle = Mathf.Atan2(transform.forward.x, transform.forward.z) / Mathf.PI * 180;
+
+            if (restricted)
+            {
+                Debug.DrawRay(transform.position, transform.forward.normalized * 2.0f, Color.yellow);
+                facingAngle = ContainAngle(currentAngle, facingAngle);
+                if (test)
+                    Debug.LogError("Result= " + facingAngle);
+
+            }
+            else
+                if(test)
+                  facingAngle = currentAngle; //TMP
+
             transform.eulerAngles = new Vector3(0.0f, facingAngle, 0.0f);
         }
 
     }
-    private float ContainAngle(float angle)
+    private float ContainAngle(float curr, float desired)
     {
-        if (Mathf.Abs(angle) > 30)
+        if (test)
+            Debug.LogWarning("Current angle= " + curr + "  Desired= " + desired);
+
+        if (desired > 0 && curr > 0)
         {
-            if (angle > 0)
-                return 30;
-            else if (angle < 0)
-                return -30;
+            if (test)
+                print("1)" + desired + " - " + curr + " = " + (desired - curr));
+            if (desired - curr > 30)
+                return curr + 30 * Time.deltaTime *2;
+        }
+        else if (desired < 0 && curr < 0)
+        {
+            if (test)
+                print("2)" + desired + " + " + curr + " = " + (desired - curr));
+
+            if (desired - curr < -30)
+                return curr - 30 * Time.deltaTime *2;
+        }
+        else
+        {
+            if (test)
+                print("3)" + desired + " - " + curr + " = " + (desired - curr));
+            //First need to check ABS value and determine best way to rotate
+            float abs = Mathf.Abs(desired);
+            if (abs - curr > 30)
+            {
+
+                float dirPos = desired - SignOf(curr) * curr;
+                float dirNeg = desired + SignOf(curr) * curr;
+
+                if (Mathf.Abs(dirPos) > Mathf.Abs(dirNeg))
+                    return curr - 30 * Time.deltaTime *2;
+                else
+                    return curr + 30 * Time.deltaTime *2;
+            }
+
         }
 
-        return angle;
+
+        return desired;
     }
+    private int SignOf(float x) // god bless google
+    {
+        return (int)((1 + x - ((x + 1) % x)) / x);
+    }
+
     void PlayerMovement5() // my adaptation but broken? need to ask in person
     {
 

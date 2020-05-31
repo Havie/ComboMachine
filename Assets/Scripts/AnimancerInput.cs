@@ -120,7 +120,7 @@ namespace Animancer.Examples.Events
                 case 1:
                     _Animancer.Play(_S, 0.5f).Speed = 0.55f;
                     lastKnown.Clip = _S.Clip;
-                    Time.timeScale = 0.5f;
+                   // Time.timeScale = 0.5f;
                     break;
                 case 2:
                     _Animancer.Play(_SS, 0.5f).Speed = 0.55f;
